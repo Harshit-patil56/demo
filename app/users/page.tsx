@@ -30,6 +30,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { AdminNavbar } from "@/components/admin-navbar"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 type User = {
   id: string
@@ -43,35 +52,32 @@ type User = {
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([
-    {
-      id: "1",
-      name: "Rajesh Kumar",
-      email: "rajesh@example.com",
-      phone: "+91 9876543210",
-      status: "active",
-      totalInvested: 250000,
-      createdAt: "2024-11-15"
-    },
-    {
-      id: "2",
-      name: "Priya Singh",
-      email: "priya@example.com",
-      phone: "+91 9876543211",
-      status: "active",
-      totalInvested: 180000,
-      createdAt: "2024-11-20"
-    },
-    {
-      id: "3",
-      name: "Amit Patel",
-      email: "amit@example.com",
-      phone: "+91 9876543212",
-      status: "inactive",
-      totalInvested: 0,
-      createdAt: "2024-12-01"
-    }
+    { id: "1", name: "Rajesh Kumar", email: "rajesh@example.com", phone: "+91 9876543210", status: "active", totalInvested: 250000, createdAt: "2024-11-15" },
+    { id: "2", name: "Priya Singh", email: "priya@example.com", phone: "+91 9876543211", status: "active", totalInvested: 180000, createdAt: "2024-11-20" },
+    { id: "3", name: "Amit Patel", email: "amit@example.com", phone: "+91 9876543212", status: "inactive", totalInvested: 0, createdAt: "2024-12-01" },
+    { id: "4", name: "Sneha Sharma", email: "sneha@example.com", phone: "+91 9876543213", status: "active", totalInvested: 320000, createdAt: "2024-10-10" },
+    { id: "5", name: "Vikram Reddy", email: "vikram@example.com", phone: "+91 9876543214", status: "active", totalInvested: 195000, createdAt: "2024-10-22" },
+    { id: "6", name: "Anita Desai", email: "anita@example.com", phone: "+91 9876543215", status: "active", totalInvested: 425000, createdAt: "2024-09-15" },
+    { id: "7", name: "Rahul Verma", email: "rahul@example.com", phone: "+91 9876543216", status: "inactive", totalInvested: 0, createdAt: "2024-11-28" },
+    { id: "8", name: "Kavita Nair", email: "kavita@example.com", phone: "+91 9876543217", status: "active", totalInvested: 275000, createdAt: "2024-09-08" },
+    { id: "9", name: "Suresh Iyer", email: "suresh@example.com", phone: "+91 9876543218", status: "active", totalInvested: 350000, createdAt: "2024-08-25" },
+    { id: "10", name: "Deepa Menon", email: "deepa@example.com", phone: "+91 9876543219", status: "active", totalInvested: 480000, createdAt: "2024-08-10" },
+    { id: "11", name: "Arjun Pillai", email: "arjun@example.com", phone: "+91 9876543220", status: "inactive", totalInvested: 0, createdAt: "2024-11-30" },
+    { id: "12", name: "Meera Gupta", email: "meera@example.com", phone: "+91 9876543221", status: "active", totalInvested: 215000, createdAt: "2024-07-18" },
+    { id: "13", name: "Karthik Rao", email: "karthik@example.com", phone: "+91 9876543222", status: "active", totalInvested: 390000, createdAt: "2024-07-05" },
+    { id: "14", name: "Lakshmi Bhat", email: "lakshmi@example.com", phone: "+91 9876543223", status: "active", totalInvested: 560000, createdAt: "2024-06-22" },
+    { id: "15", name: "Ravi Krishnan", email: "ravi@example.com", phone: "+91 9876543224", status: "active", totalInvested: 145000, createdAt: "2024-11-12" },
+    { id: "16", name: "Sita Ramesh", email: "sita@example.com", phone: "+91 9876543225", status: "inactive", totalInvested: 0, createdAt: "2024-12-02" },
+    { id: "17", name: "Mohan Das", email: "mohan@example.com", phone: "+91 9876543226", status: "active", totalInvested: 285000, createdAt: "2024-06-10" },
+    { id: "18", name: "Radha Krishnan", email: "radha@example.com", phone: "+91 9876543227", status: "active", totalInvested: 410000, createdAt: "2024-05-28" },
+    { id: "19", name: "Ganesh Murthy", email: "ganesh@example.com", phone: "+91 9876543228", status: "active", totalInvested: 330000, createdAt: "2024-05-15" },
+    { id: "20", name: "Saraswati Iyer", email: "saraswati@example.com", phone: "+91 9876543229", status: "active", totalInvested: 505000, createdAt: "2024-05-02" },
+    { id: "21", name: "Manoj Nambiar", email: "manoj@example.com", phone: "+91 9876543230", status: "inactive", totalInvested: 0, createdAt: "2024-11-25" },
+    { id: "22", name: "Divya Shetty", email: "divya@example.com", phone: "+91 9876543231", status: "active", totalInvested: 240000, createdAt: "2024-04-20" }
   ])
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
@@ -92,6 +98,26 @@ export default function UsersPage() {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter
     return matchesSearch && matchesStatus
   })
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleDeleteUser = (userId: string) => {
+    setUsers(users.filter(u => u.id !== userId))
+  }
+
+  const handleToggleStatus = (userId: string) => {
+    setUsers(users.map(u => 
+      u.id === userId ? { ...u, status: u.status === "active" ? "inactive" : "active" } : u
+    ))
+  }
 
   const handleAddUser = () => {
     const newUser: User = {
@@ -233,7 +259,7 @@ export default function UsersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => {
+              {paginatedUsers.map((user) => {
                 const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase()
                 return (
                   <TableRow key={user.id}>
@@ -301,6 +327,66 @@ export default function UsersPage() {
             </TableBody>
           </Table>
         </div>
+
+        {totalPages > 1 && (
+          <div className="mt-6">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (currentPage > 1) handlePageChange(currentPage - 1)
+                    }}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                {[...Array(totalPages)].map((_, i) => {
+                  const page = i + 1
+                  if (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          href="#"
+                          isActive={currentPage === page}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handlePageChange(page)
+                          }}
+                          className="cursor-pointer"
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  } else if (page === currentPage - 2 || page === currentPage + 2) {
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )
+                  }
+                  return null
+                })}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (currentPage < totalPages) handlePageChange(currentPage + 1)
+                    }}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

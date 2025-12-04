@@ -31,6 +31,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 type Investment = {
   id: string
@@ -50,38 +59,32 @@ type Investment = {
 
 export default function InvestmentsPage() {
   const [investments, setInvestments] = useState<Investment[]>([
-    {
-      id: "1",
-      userId: "1",
-      userName: "Rajesh Kumar",
-      planId: "1",
-      planName: "Standard Plan",
-      principalAmount: 50000,
-      interestRate: 8.5,
-      interestType: "simple",
-      currentValue: 54250,
-      profit: 4250,
-      startDate: "2024-06-15",
-      maturityDate: "2025-06-15",
-      status: "active"
-    },
-    {
-      id: "2",
-      userId: "2",
-      userName: "Priya Singh",
-      planId: "2",
-      planName: "Premium Plan",
-      principalAmount: 200000,
-      interestRate: 12,
-      interestType: "compound",
-      currentValue: 224000,
-      profit: 24000,
-      startDate: "2024-01-10",
-      maturityDate: "2026-01-10",
-      status: "active"
-    }
+    { id: "1", userId: "1", userName: "Rajesh Kumar", planId: "1", planName: "Standard Plan", principalAmount: 50000, interestRate: 8.5, interestType: "simple", currentValue: 54250, profit: 4250, startDate: "2024-06-15", maturityDate: "2025-06-15", status: "active" },
+    { id: "2", userId: "2", userName: "Priya Singh", planId: "2", planName: "Premium Plan", principalAmount: 200000, interestRate: 12, interestType: "compound", currentValue: 224000, profit: 24000, startDate: "2024-01-10", maturityDate: "2026-01-10", status: "active" },
+    { id: "3", userId: "3", userName: "Amit Patel", planId: "1", planName: "Standard Plan", principalAmount: 75000, interestRate: 8.5, interestType: "simple", currentValue: 81375, profit: 6375, startDate: "2024-05-20", maturityDate: "2025-05-20", status: "active" },
+    { id: "4", userId: "4", userName: "Sneha Sharma", planId: "2", planName: "Premium Plan", principalAmount: 150000, interestRate: 12, interestType: "compound", currentValue: 168000, profit: 18000, startDate: "2024-03-15", maturityDate: "2026-03-15", status: "active" },
+    { id: "5", userId: "5", userName: "Vikram Reddy", planId: "1", planName: "Standard Plan", principalAmount: 100000, interestRate: 8.5, interestType: "simple", currentValue: 108500, profit: 8500, startDate: "2024-02-10", maturityDate: "2025-02-10", status: "active" },
+    { id: "6", userId: "6", userName: "Anita Desai", planId: "2", planName: "Premium Plan", principalAmount: 250000, interestRate: 12, interestType: "compound", currentValue: 280000, profit: 30000, startDate: "2024-04-05", maturityDate: "2026-04-05", status: "active" },
+    { id: "7", userId: "7", userName: "Rahul Verma", planId: "1", planName: "Standard Plan", principalAmount: 60000, interestRate: 8.5, interestType: "simple", currentValue: 65100, profit: 5100, startDate: "2024-07-10", maturityDate: "2025-07-10", status: "active" },
+    { id: "8", userId: "8", userName: "Kavita Nair", planId: "2", planName: "Premium Plan", principalAmount: 180000, interestRate: 12, interestType: "compound", currentValue: 201600, profit: 21600, startDate: "2024-02-20", maturityDate: "2026-02-20", status: "active" },
+    { id: "9", userId: "9", userName: "Suresh Iyer", planId: "1", planName: "Standard Plan", principalAmount: 85000, interestRate: 8.5, interestType: "simple", currentValue: 92225, profit: 7225, startDate: "2024-06-01", maturityDate: "2025-06-01", status: "active" },
+    { id: "10", userId: "10", userName: "Deepa Menon", planId: "2", planName: "Premium Plan", principalAmount: 220000, interestRate: 12, interestType: "compound", currentValue: 246400, profit: 26400, startDate: "2024-03-25", maturityDate: "2026-03-25", status: "active" },
+    { id: "11", userId: "11", userName: "Arjun Pillai", planId: "1", planName: "Standard Plan", principalAmount: 95000, interestRate: 8.5, interestType: "simple", currentValue: 103075, profit: 8075, startDate: "2024-05-10", maturityDate: "2025-05-10", status: "matured" },
+    { id: "12", userId: "12", userName: "Meera Gupta", planId: "2", planName: "Premium Plan", principalAmount: 160000, interestRate: 12, interestType: "compound", currentValue: 179200, profit: 19200, startDate: "2024-01-20", maturityDate: "2026-01-20", status: "active" },
+    { id: "13", userId: "13", userName: "Karthik Rao", planId: "1", planName: "Standard Plan", principalAmount: 70000, interestRate: 8.5, interestType: "simple", currentValue: 75950, profit: 5950, startDate: "2024-04-15", maturityDate: "2025-04-15", status: "active" },
+    { id: "14", userId: "14", userName: "Lakshmi Bhat", planId: "2", planName: "Premium Plan", principalAmount: 280000, interestRate: 12, interestType: "compound", currentValue: 313600, profit: 33600, startDate: "2024-02-28", maturityDate: "2026-02-28", status: "active" },
+    { id: "15", userId: "15", userName: "Ravi Krishnan", planId: "1", planName: "Standard Plan", principalAmount: 55000, interestRate: 8.5, interestType: "simple", currentValue: 59675, profit: 4675, startDate: "2024-07-20", maturityDate: "2025-07-20", status: "active" },
+    { id: "16", userId: "16", userName: "Sita Ramesh", planId: "2", planName: "Premium Plan", principalAmount: 190000, interestRate: 12, interestType: "compound", currentValue: 212800, profit: 22800, startDate: "2024-03-10", maturityDate: "2026-03-10", status: "closed" },
+    { id: "17", userId: "17", userName: "Mohan Das", planId: "1", planName: "Standard Plan", principalAmount: 80000, interestRate: 8.5, interestType: "simple", currentValue: 86800, profit: 6800, startDate: "2024-05-25", maturityDate: "2025-05-25", status: "active" },
+    { id: "18", userId: "18", userName: "Radha Krishnan", planId: "2", planName: "Premium Plan", principalAmount: 240000, interestRate: 12, interestType: "compound", currentValue: 268800, profit: 28800, startDate: "2024-04-18", maturityDate: "2026-04-18", status: "active" },
+    { id: "19", userId: "19", userName: "Ganesh Murthy", planId: "1", planName: "Standard Plan", principalAmount: 65000, interestRate: 8.5, interestType: "simple", currentValue: 70525, profit: 5525, startDate: "2024-06-25", maturityDate: "2025-06-25", status: "active" },
+    { id: "20", userId: "20", userName: "Saraswati Iyer", planId: "2", planName: "Premium Plan", principalAmount: 210000, interestRate: 12, interestType: "compound", currentValue: 235200, profit: 25200, startDate: "2024-01-30", maturityDate: "2026-01-30", status: "matured" },
+    { id: "21", userId: "21", userName: "Manoj Nambiar", planId: "1", planName: "Standard Plan", principalAmount: 90000, interestRate: 8.5, interestType: "simple", currentValue: 97650, profit: 7650, startDate: "2024-07-05", maturityDate: "2025-07-05", status: "active" },
+    { id: "22", userId: "22", userName: "Divya Shetty", planId: "2", planName: "Premium Plan", principalAmount: 170000, interestRate: 12, interestType: "compound", currentValue: 190400, profit: 20400, startDate: "2024-02-15", maturityDate: "2026-02-15", status: "active" }
   ])
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [selectedInvestment, setSelectedInvestment] = useState<Investment | null>(null)
@@ -95,6 +98,15 @@ export default function InvestmentsPage() {
     const matchesStatus = statusFilter === "all" || inv.status === statusFilter
     return matchesSearch && matchesStatus
   })
+
+  const totalPages = Math.ceil(filteredInvestments.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedInvestments = filteredInvestments.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
   
   const mockUsers = [
     { id: "1", name: "Rajesh Kumar" },
@@ -311,7 +323,7 @@ export default function InvestmentsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredInvestments.map((inv) => {
+              {paginatedInvestments.map((inv) => {
                 const initials = inv.userName.split(' ').map(n => n[0]).join('').toUpperCase()
                 return (
                   <TableRow key={inv.id}>
@@ -441,6 +453,66 @@ export default function InvestmentsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (currentPage > 1) handlePageChange(currentPage - 1)
+                  }}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              {[...Array(totalPages)].map((_, i) => {
+                const page = i + 1
+                if (
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                ) {
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        href="#"
+                        isActive={currentPage === page}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handlePageChange(page)
+                        }}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                } else if (page === currentPage - 2 || page === currentPage + 2) {
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )
+                }
+                return null
+              })}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (currentPage < totalPages) handlePageChange(currentPage + 1)
+                  }}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   )
 }

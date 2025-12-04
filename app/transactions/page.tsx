@@ -27,6 +27,15 @@ import {
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 type Transaction = {
   id: string
@@ -41,80 +50,35 @@ type Transaction = {
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([
-    {
-      id: "0440",
-      type: "withdrawal",
-      amount: 50000,
-      requestDate: "2024-12-01",
-      processedDate: "2024-12-01",
-      status: "approved",
-      description: "Withdrawal"
-    },
-    {
-      id: "2290",
-      type: "withdrawal",
-      amount: 25000,
-      requestDate: "2024-11-28",
-      processedDate: "2024-11-29",
-      status: "approved",
-      description: "Withdrawal"
-    },
-    {
-      id: "3311",
-      type: "withdrawal",
-      amount: 75000,
-      requestDate: "2024-11-25",
-      processedDate: "2024-11-26",
-      status: "approved",
-      description: "Withdrawal"
-    },
-    {
-      id: "4422",
-      type: "deposit",
-      amount: 150000,
-      requestDate: "2024-11-20",
-      processedDate: "2024-11-20",
-      status: "approved",
-      description: "Deposit"
-    },
-    {
-      id: "5522",
-      type: "withdrawal",
-      amount: 35000,
-      requestDate: "2024-11-15",
-      processedDate: "2024-11-16",
-      status: "approved",
-      description: "Withdrawal"
-    },
-    {
-      id: "1133",
-      type: "withdrawal",
-      amount: 120000,
-      requestDate: "2024-11-10",
-      processedDate: "2024-11-11",
-      status: "approved",
-      description: "Withdrawal"
-    },
-    {
-      id: "7788",
-      type: "deposit",
-      amount: 200000,
-      requestDate: "2024-11-05",
-      processedDate: "2024-11-05",
-      status: "approved",
-      description: "Deposit"
-    },
-    {
-      id: "9900",
-      type: "deposit",
-      amount: 100000,
-      requestDate: "2024-12-03",
-      processedDate: null,
-      status: "pending",
-      description: "Deposit"
-    }
+    { id: "0440", type: "withdrawal", amount: 50000, requestDate: "2024-12-01", processedDate: "2024-12-01", status: "approved", description: "Withdrawal" },
+    { id: "2290", type: "withdrawal", amount: 25000, requestDate: "2024-11-28", processedDate: "2024-11-29", status: "approved", description: "Withdrawal" },
+    { id: "3311", type: "withdrawal", amount: 75000, requestDate: "2024-11-25", processedDate: "2024-11-26", status: "approved", description: "Withdrawal" },
+    { id: "4422", type: "deposit", amount: 150000, requestDate: "2024-11-20", processedDate: "2024-11-20", status: "approved", description: "Deposit" },
+    { id: "5522", type: "withdrawal", amount: 35000, requestDate: "2024-11-15", processedDate: "2024-11-16", status: "approved", description: "Withdrawal" },
+    { id: "1133", type: "withdrawal", amount: 120000, requestDate: "2024-11-10", processedDate: "2024-11-11", status: "approved", description: "Withdrawal" },
+    { id: "7788", type: "deposit", amount: 200000, requestDate: "2024-11-05", processedDate: "2024-11-05", status: "approved", description: "Deposit" },
+    { id: "9900", type: "deposit", amount: 100000, requestDate: "2024-12-03", processedDate: null, status: "pending", description: "Deposit" },
+    { id: "8811", type: "deposit", amount: 85000, requestDate: "2024-10-28", processedDate: "2024-10-28", status: "approved", description: "Deposit" },
+    { id: "7722", type: "withdrawal", amount: 45000, requestDate: "2024-10-20", processedDate: "2024-10-21", status: "approved", description: "Withdrawal" },
+    { id: "6633", type: "deposit", amount: 175000, requestDate: "2024-10-15", processedDate: "2024-10-15", status: "approved", description: "Deposit" },
+    { id: "5544", type: "withdrawal", amount: 62000, requestDate: "2024-10-10", processedDate: "2024-10-11", status: "approved", description: "Withdrawal" },
+    { id: "4455", type: "deposit", amount: 95000, requestDate: "2024-10-05", processedDate: "2024-10-05", status: "approved", description: "Deposit" },
+    { id: "3366", type: "withdrawal", amount: 55000, requestDate: "2024-09-28", processedDate: "2024-09-29", status: "approved", description: "Withdrawal" },
+    { id: "2277", type: "deposit", amount: 125000, requestDate: "2024-09-20", processedDate: "2024-09-20", status: "approved", description: "Deposit" },
+    { id: "1188", type: "withdrawal", amount: 38000, requestDate: "2024-09-15", processedDate: "2024-09-16", status: "rejected", description: "Withdrawal" },
+    { id: "0099", type: "deposit", amount: 160000, requestDate: "2024-09-10", processedDate: "2024-09-10", status: "approved", description: "Deposit" },
+    { id: "9988", type: "withdrawal", amount: 72000, requestDate: "2024-09-05", processedDate: "2024-09-06", status: "approved", description: "Withdrawal" },
+    { id: "8877", type: "deposit", amount: 110000, requestDate: "2024-08-28", processedDate: "2024-08-28", status: "approved", description: "Deposit" },
+    { id: "7766", type: "withdrawal", amount: 48000, requestDate: "2024-08-20", processedDate: "2024-08-21", status: "approved", description: "Withdrawal" },
+    { id: "6655", type: "deposit", amount: 135000, requestDate: "2024-08-15", processedDate: "2024-08-15", status: "approved", description: "Deposit" },
+    { id: "5566", type: "withdrawal", amount: 58000, requestDate: "2024-08-10", processedDate: "2024-08-11", status: "approved", description: "Withdrawal" },
+    { id: "4477", type: "deposit", amount: 92000, requestDate: "2024-08-05", processedDate: "2024-08-05", status: "approved", description: "Deposit" },
+    { id: "3388", type: "withdrawal", amount: 41000, requestDate: "2024-07-28", processedDate: "2024-07-29", status: "approved", description: "Withdrawal" },
+    { id: "2299", type: "deposit", amount: 155000, requestDate: "2024-07-20", processedDate: "2024-07-20", status: "approved", description: "Deposit" }
   ])
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false)
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
@@ -152,6 +116,16 @@ export default function TransactionsPage() {
   })
 
   const pendingCount = transactions.filter(t => t.status === "pending").length
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedTransactions = filteredTransactions.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -261,7 +235,7 @@ export default function TransactionsPage() {
         <Card className="border-[rgb(233,233,235)]">
           <CardContent className="p-0">
             <div className="divide-y divide-[rgb(233,233,235)]">
-              {filteredTransactions.map((txn) => (
+              {paginatedTransactions.map((txn) => (
                 <div
                   key={txn.id}
                   className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors cursor-pointer group"
@@ -293,6 +267,66 @@ export default function TransactionsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {totalPages > 1 && (
+          <div className="mt-6">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (currentPage > 1) handlePageChange(currentPage - 1)
+                    }}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                {[...Array(totalPages)].map((_, i) => {
+                  const page = i + 1
+                  if (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          href="#"
+                          isActive={currentPage === page}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handlePageChange(page)
+                          }}
+                          className="cursor-pointer"
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  } else if (page === currentPage - 2 || page === currentPage + 2) {
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )
+                  }
+                  return null
+                })}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (currentPage < totalPages) handlePageChange(currentPage + 1)
+                    }}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
     </div>
   )
