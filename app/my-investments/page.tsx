@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import React from "react"
 import { UserNavbar } from "@/components/user-navbar"
 import {
@@ -65,6 +65,8 @@ export default function MyInvestmentsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
   const [expandedRow, setExpandedRow] = useState<string | null>(null)
+  const [expandedTransactions, setExpandedTransactions] = useState<string | null>(null)
+  const [hoveredInvestment, setHoveredInvestment] = useState<string | null>(null)
   const [depositAmount, setDepositAmount] = useState("")
   const [withdrawalAmount, setWithdrawalAmount] = useState("")
   const [viewMode, setViewMode] = useState<"table" | "pie">("table")
@@ -122,6 +124,20 @@ export default function MyInvestmentsPage() {
     setCurrentPage(page)
   }
 
+  // Close expanded row when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (expandedRow && !target.closest('tr')) {
+        setExpandedRow(null)
+        setExpandedTransactions(null)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [expandedRow])
+
   return (
     <div className="min-h-screen bg-gray-50">
       <UserNavbar currentPage="My Investments" />
@@ -144,24 +160,169 @@ export default function MyInvestmentsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedInvestments.map((inv) => (
-                <TableRow key={inv.id}>
-                  <TableCell>{inv.planName}</TableCell>
-                  <TableCell>₹{inv.principalAmount.toLocaleString('en-IN')}</TableCell>
-                  <TableCell>{inv.interestRate}%</TableCell>
-                  <TableCell>₹{inv.currentValue.toLocaleString('en-IN')}</TableCell>
-                  <TableCell className="text-green-600">₹{inv.profit.toLocaleString('en-IN')}</TableCell>
-                  <TableCell>{inv.startDate}</TableCell>
-                  <TableCell>{inv.maturityDate}</TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      inv.status === "active" ? "text-green-700" : "text-gray-600"
-                    }`}>
-                      {inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}
-                    </span>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {paginatedInvestments.map((inv) => {
+                const isExpanded = expandedRow === inv.id
+                const invTransactions = transactions.filter(t => t.investmentId === inv.id)
+                
+                return (
+                  <React.Fragment key={inv.id}>
+                    <TableRow 
+                      className={`cursor-pointer hover:bg-gray-50 transition-all duration-200 ${
+                        expandedRow && expandedRow !== inv.id ? 'opacity-30 blur-sm' : ''
+                      }`}
+                      onClick={() => setExpandedRow(isExpanded ? null : inv.id)}
+                    >
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                          {inv.planName}
+                        </div>
+                      </TableCell>
+                      <TableCell>₹{inv.principalAmount.toLocaleString('en-IN')}</TableCell>
+                      <TableCell>{inv.interestRate}%</TableCell>
+                      <TableCell>₹{inv.currentValue.toLocaleString('en-IN')}</TableCell>
+                      <TableCell className="text-green-600">₹{inv.profit.toLocaleString('en-IN')}</TableCell>
+                      <TableCell>{inv.startDate}</TableCell>
+                      <TableCell>{inv.maturityDate}</TableCell>
+                      <TableCell>
+                        <span className={`px-3 py-1 rounded-md text-sm font-medium ${
+                          inv.status === "active" ? "text-green-700" : "text-gray-600"
+                        }`}>
+                          {inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                    {isExpanded && (
+                      <TableRow>
+                        <TableCell colSpan={8} className="bg-gray-50 p-6">
+                          <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                              <div className="space-y-2">
+                                <h3 className="text-sm font-semibold text-gray-600">Investment Details</h3>
+                                <div className="space-y-1 text-sm">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Investment ID:</span>
+                                    <span className="font-medium">{inv.id}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Interest Type:</span>
+                                    <span className="font-medium capitalize">{inv.interestType}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Days Remaining:</span>
+                                    <span className="font-medium">
+                                      {inv.status === "active" ? `${getDaysRemaining(inv.maturityDate)} days` : "N/A"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <h3 className="text-sm font-semibold text-gray-600">Financial Summary</h3>
+                                <div className="space-y-1 text-sm">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Principal Amount:</span>
+                                    <span className="font-medium">₹{inv.principalAmount.toLocaleString('en-IN')}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Current Value:</span>
+                                    <span className="font-medium">₹{inv.currentValue.toLocaleString('en-IN')}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Total Profit:</span>
+                                    <span className="font-medium text-green-600">₹{inv.profit.toLocaleString('en-IN')}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">ROI:</span>
+                                    <span className="font-medium text-green-600">
+                                      {((inv.profit / inv.principalAmount) * 100).toFixed(2)}%
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <h3 className="text-sm font-semibold text-gray-600">Timeline</h3>
+                                <div className="space-y-1 text-sm">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Start Date:</span>
+                                    <span className="font-medium">{new Date(inv.startDate).toLocaleDateString('en-IN')}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Maturity Date:</span>
+                                    <span className="font-medium">{new Date(inv.maturityDate).toLocaleDateString('en-IN')}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500">Duration:</span>
+                                    <span className="font-medium">
+                                      {Math.floor((new Date(inv.maturityDate).getTime() - new Date(inv.startDate).getTime()) / (1000 * 60 * 60 * 24))} days
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="border-t pt-4">
+                              <div 
+                                className="flex items-center justify-between cursor-pointer hover:bg-gray-100 -mx-2 px-2 py-2 rounded transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setExpandedTransactions(expandedTransactions === inv.id ? null : inv.id)
+                                }}
+                              >
+                                <h3 className="text-sm font-semibold text-gray-600">Transaction History</h3>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-gray-500">{invTransactions.length} transaction{invTransactions.length !== 1 ? 's' : ''}</span>
+                                  {expandedTransactions === inv.id ? 
+                                    <ChevronUp className="h-4 w-4 text-gray-600" /> : 
+                                    <ChevronDown className="h-4 w-4 text-gray-600" />
+                                  }
+                                </div>
+                              </div>
+                              {expandedTransactions === inv.id && invTransactions.length > 0 && (
+                                <div className="divide-y divide-gray-200 mt-3">
+                                  {invTransactions.map((txn) => (
+                                    <div
+                                      key={txn.id}
+                                      className="flex items-center justify-between py-3 hover:bg-gray-50 transition-colors px-2 rounded"
+                                    >
+                                      <div className="flex items-center gap-6 flex-1">
+                                        <p className="text-sm text-gray-500 w-24 flex-shrink-0">
+                                          {new Date(txn.date).toLocaleDateString('en-US', { 
+                                            day: 'numeric', 
+                                            month: 'short', 
+                                            year: 'numeric' 
+                                          })}
+                                        </p>
+                                        <div className="flex-1">
+                                          <h4 className="font-semibold text-sm text-gray-900 capitalize">
+                                            {txn.type}
+                                          </h4>
+                                          <p className="text-xs text-gray-500 mt-0.5 capitalize">
+                                            {txn.status}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <p className={`font-semibold text-sm ${
+                                        txn.type === "deposit" ? "text-green-600" : "text-red-600"
+                                      }`}>
+                                        {txn.type === "deposit" ? "+" : "-"}₹{txn.amount.toLocaleString('en-IN')}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {expandedTransactions === inv.id && invTransactions.length === 0 && (
+                                <p className="text-sm text-gray-500 mt-3">No transactions found for this investment.</p>
+                              )}
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
+                )
+              })}
             </TableBody>
           </Table>
         </div>
