@@ -1,20 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { UserNavbar } from "@/components/user-navbar"
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  Card,
+  CardContent,
+} from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -45,33 +36,82 @@ type Transaction = {
   processedDate: string | null
   status: "pending" | "approved" | "rejected"
   notes?: string
+  description: string
 }
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([
     {
-      id: "1",
-      type: "deposit",
+      id: "0440",
+      type: "withdrawal",
       amount: 50000,
       requestDate: "2024-12-01",
       processedDate: "2024-12-01",
-      status: "approved"
+      status: "approved",
+      description: "Withdrawal"
     },
     {
-      id: "2",
+      id: "2290",
       type: "withdrawal",
       amount: 25000,
       requestDate: "2024-11-28",
       processedDate: "2024-11-29",
-      status: "approved"
+      status: "approved",
+      description: "Withdrawal"
     },
     {
-      id: "3",
+      id: "3311",
+      type: "withdrawal",
+      amount: 75000,
+      requestDate: "2024-11-25",
+      processedDate: "2024-11-26",
+      status: "approved",
+      description: "Withdrawal"
+    },
+    {
+      id: "4422",
+      type: "deposit",
+      amount: 150000,
+      requestDate: "2024-11-20",
+      processedDate: "2024-11-20",
+      status: "approved",
+      description: "Deposit"
+    },
+    {
+      id: "5522",
+      type: "withdrawal",
+      amount: 35000,
+      requestDate: "2024-11-15",
+      processedDate: "2024-11-16",
+      status: "approved",
+      description: "Withdrawal"
+    },
+    {
+      id: "1133",
+      type: "withdrawal",
+      amount: 120000,
+      requestDate: "2024-11-10",
+      processedDate: "2024-11-11",
+      status: "approved",
+      description: "Withdrawal"
+    },
+    {
+      id: "7788",
+      type: "deposit",
+      amount: 200000,
+      requestDate: "2024-11-05",
+      processedDate: "2024-11-05",
+      status: "approved",
+      description: "Deposit"
+    },
+    {
+      id: "9900",
       type: "deposit",
       amount: 100000,
       requestDate: "2024-12-03",
       processedDate: null,
-      status: "pending"
+      status: "pending",
+      description: "Deposit"
     }
   ])
 
@@ -88,13 +128,14 @@ export default function TransactionsPage() {
 
   const handleSubmitRequest = () => {
     const newTransaction: Transaction = {
-      id: String(transactions.length + 1),
+      id: String(Math.floor(Math.random() * 10000)),
       type: formData.type,
       amount: Number(formData.amount),
       requestDate: new Date().toISOString().split('T')[0],
       processedDate: null,
       status: "pending",
-      notes: formData.notes
+      notes: formData.notes,
+      description: formData.type === "deposit" ? "Deposit" : "Withdrawal"
     }
     setTransactions([newTransaction, ...transactions])
     setIsRequestDialogOpen(false)
@@ -114,40 +155,7 @@ export default function TransactionsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-semibold text-gray-900">Transactions</h1>
-            <div className="flex-1 flex justify-center">
-              <NavigationMenu className="max-w-full">
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/user-dashboard" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
-                      Dashboard
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/my-investments" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
-                      My Investments
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/transactions" className="px-4 py-2 relative text-lg">
-                      <span className="font-medium text-gray-900">Transactions</span>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/profile" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
-                      Profile
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-            </div>
-            <Badge className="px-4 py-2 text-base bg-gray-900 text-white hover:bg-gray-800 font-medium">User</Badge>
-          </div>
-        </div>
-      </nav>
+      <UserNavbar currentPage="Transactions" />
 
       <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
@@ -250,49 +258,43 @@ export default function TransactionsPage() {
           </div>
         )}
 
-        <div className="[&>div]:rounded-sm [&>div]:border">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead>Request Date</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Processed Date</TableHead>
-                <TableHead>Notes</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+        <Card className="border-[rgb(233,233,235)]">
+          <CardContent className="p-0">
+            <div className="divide-y divide-[rgb(233,233,235)]">
               {filteredTransactions.map((txn) => (
-                <TableRow key={txn.id}>
-                  <TableCell>{txn.requestDate}</TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      txn.type === "deposit" ? "text-green-700" : "text-orange-700"
-                    }`}>
-                      {txn.type.charAt(0).toUpperCase() + txn.type.slice(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell className={txn.type === "deposit" ? "text-green-600" : "text-red-600"}>
+                <div
+                  key={txn.id}
+                  className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors cursor-pointer group"
+                >
+                  <div className="flex items-center gap-8 flex-1">
+                    <p className="text-sm text-gray-500 w-24 flex-shrink-0">
+                      {new Date(txn.requestDate).toLocaleDateString('en-US', { 
+                        day: 'numeric', 
+                        month: 'short', 
+                        year: 'numeric' 
+                      })}
+                    </p>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-base text-gray-900">
+                        {txn.description}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-0.5 capitalize">
+                        {txn.status}
+                      </p>
+                    </div>
+                  </div>
+                  <p className={`font-semibold text-base ${
+                    txn.type === "deposit" ? "text-green-600" : "text-red-600"
+                  }`}>
                     {txn.type === "deposit" ? "+" : "-"}₹{txn.amount.toLocaleString('en-IN')}
-                  </TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      txn.status === "approved" ? "text-green-700" :
-                      txn.status === "pending" ? "text-yellow-700" :
-                      "text-red-700"
-                    }`}>
-                      {txn.status.charAt(0).toUpperCase() + txn.status.slice(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell>{txn.processedDate || "-"}</TableCell>
-                  <TableCell>{txn.notes || "-"}</TableCell>
-                </TableRow>
+                  </p>
+                </div>
               ))}
-            </TableBody>
-          </Table>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
 }
+

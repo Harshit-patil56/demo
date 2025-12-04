@@ -2,12 +2,7 @@
 
 import { useState } from "react"
 import React from "react"
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+import { UserNavbar } from "@/components/user-navbar"
 import {
   Table,
   TableBody,
@@ -145,40 +140,7 @@ export default function MyInvestmentsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-semibold text-gray-900">My Investments</h1>
-            <div className="flex-1 flex justify-center">
-              <NavigationMenu className="max-w-full">
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/user-dashboard" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
-                      Dashboard
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/my-investments" className="px-4 py-2 relative text-lg">
-                      <span className="font-medium text-gray-900">My Investments</span>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/transactions" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
-                      Transactions
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/profile" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
-                      Profile
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-            </div>
-            <Badge className="px-4 py-2 text-base bg-gray-900 text-white hover:bg-gray-800 font-medium">User</Badge>
-          </div>
-        </div>
-      </nav>
+      <UserNavbar currentPage="My Investments" />
 
       <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>

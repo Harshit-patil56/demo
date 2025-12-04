@@ -2,12 +2,6 @@
 
 import { useState } from "react"
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
-import {
   Table,
   TableBody,
   TableCell,
@@ -15,7 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { AdminNavbar } from "@/components/admin-navbar"
 import {
   Dialog,
   DialogContent,
@@ -204,55 +199,7 @@ export default function InvestmentsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-semibold text-gray-900">Investments</h1>
-            <div className="flex-1 flex justify-center">
-              <NavigationMenu className="max-w-full">
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/dashboard" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
-                      Dashboard
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/users" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
-                      Users
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/plans" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
-                      Plans
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/investments" className="px-4 py-2 relative text-lg">
-                      <span className="font-medium text-gray-900">Investments</span>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/requests" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
-                      Requests
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/maturities" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
-                      Maturities
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink href="/reports" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
-                      Reports
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-            </div>
-            <Badge className="px-4 py-2 text-base bg-gray-900 text-white hover:bg-gray-800 font-medium">Admin</Badge>
-          </div>
-        </div>
-      </nav>
+      <AdminNavbar currentPage="Investments" />
 
       <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
