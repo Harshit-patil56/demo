@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -302,10 +303,10 @@ export default function MaturitiesPage() {
           </div>
         </div>
 
-        <div className="border border-[rgb(233,233,235)] bg-white">
+        <div className="[&>div]:rounded-sm [&>div]:border">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>User</TableHead>
                 <TableHead>Plan</TableHead>
                 <TableHead>Principal</TableHead>
@@ -313,36 +314,46 @@ export default function MaturitiesPage() {
                 <TableHead>Maturity Date</TableHead>
                 <TableHead>Days Left</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sortedInvestments.map((inv) => (
-                <TableRow key={inv.id}>
-                  <TableCell>{inv.userName}</TableCell>
-                  <TableCell>{inv.planName}</TableCell>
-                  <TableCell>₹{inv.principalAmount.toLocaleString('en-IN')}</TableCell>
-                  <TableCell className="font-semibold">₹{inv.currentValue.toLocaleString('en-IN')}</TableCell>
-                  <TableCell>{inv.maturityDate}</TableCell>
-                  <TableCell>
-                    <span className={getStatusColor(inv.status)}>
-                      {getDaysText(inv.daysUntilMaturity)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      inv.status === "maturing-soon" ? "text-blue-700" :
-                      inv.status === "matured" ? "text-green-700" :
-                      "text-red-700"
-                    }`}>
-                      {getStatusText(inv.status)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm text-gray-600">View</span>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {sortedInvestments.map((inv) => {
+                const initials = inv.userName.split(' ').map(n => n[0]).join('').toUpperCase()
+                return (
+                  <TableRow key={inv.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback className="text-xs bg-gray-700 text-white">{initials}</AvatarFallback>
+                        </Avatar>
+                        <div className="font-medium">{inv.userName}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{inv.planName}</TableCell>
+                    <TableCell>₹{inv.principalAmount.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="font-semibold">₹{inv.currentValue.toLocaleString('en-IN')}</TableCell>
+                    <TableCell>{inv.maturityDate}</TableCell>
+                    <TableCell>
+                      <span className={getStatusColor(inv.status)}>
+                        {getDaysText(inv.daysUntilMaturity)}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className={`px-3 py-1 rounded-md text-sm font-medium ${
+                        inv.status === "maturing-soon" ? "text-blue-700" :
+                        inv.status === "matured" ? "text-green-700" :
+                        "text-red-700"
+                      }`}>
+                        {getStatusText(inv.status)}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <span className="text-sm text-gray-600">View</span>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </div>

@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -202,64 +203,74 @@ export default function RequestsPage() {
           </div>
         </div>
 
-        <div className="border border-[rgb(233,233,235)] bg-white">
+        <div className="[&>div]:rounded-sm [&>div]:border">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>User</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredRequests.map((req) => (
-                <TableRow key={req.id}>
-                  <TableCell>{req.id}</TableCell>
-                  <TableCell>{req.userName}</TableCell>
-                  <TableCell>
-                    <span className="px-3 py-1 rounded-md text-sm font-medium text-purple-700">
-                      {req.type.charAt(0).toUpperCase() + req.type.slice(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell>₹{req.amount.toLocaleString()}</TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      req.status === "pending" ? "text-yellow-700" :
-                      req.status === "approved" ? "text-green-700" :
-                      "text-red-700"
-                    }`}>
-                      {req.status.charAt(0).toUpperCase() + req.status.slice(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell>{req.requestDate}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      {req.status === "pending" && (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleApprove(req.id)}
-                          >
-                            Approve
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleReject(req.id)}
-                          >
-                            Reject
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {filteredRequests.map((req) => {
+                const initials = req.userName.split(' ').map(n => n[0]).join('').toUpperCase()
+                return (
+                  <TableRow key={req.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback className="text-xs bg-gray-700 text-white">{initials}</AvatarFallback>
+                        </Avatar>
+                        <div className="font-medium">{req.userName}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="px-3 py-1 rounded-md text-sm font-medium text-purple-700">
+                        {req.type.charAt(0).toUpperCase() + req.type.slice(1)}
+                      </span>
+                    </TableCell>
+                    <TableCell>₹{req.amount.toLocaleString()}</TableCell>
+                    <TableCell>
+                      <span className={`px-3 py-1 rounded-md text-sm font-medium ${
+                        req.status === "pending" ? "text-yellow-700" :
+                        req.status === "approved" ? "text-green-700" :
+                        "text-red-700"
+                      }`}>
+                        {req.status.charAt(0).toUpperCase() + req.status.slice(1)}
+                      </span>
+                    </TableCell>
+                    <TableCell>{req.requestDate}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2 justify-end">
+                        {req.status === "pending" && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="cursor-pointer transition-colors duration-200"
+                              onClick={() => handleApprove(req.id)}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="cursor-pointer transition-colors duration-200"
+                              onClick={() => handleReject(req.id)}
+                            >
+                              Reject
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </div>

@@ -250,10 +250,10 @@ export default function TransactionsPage() {
           </div>
         )}
 
-        <div className="border border-[rgb(233,233,235)] bg-white">
+        <div className="[&>div]:rounded-sm [&>div]:border">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>Request Date</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Amount</TableHead>

@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Dialog,
   DialogContent,
@@ -272,72 +273,85 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <div className="border border-[rgb(233,233,235)] bg-white">
+        <div className="[&>div]:rounded-sm [&>div]:border">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Phone</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Total Invested</TableHead>
                 <TableHead>Created At</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.phone}</TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      user.status === "active" 
-                        ? "text-green-700" 
-                        : "text-gray-600"
-                    }`}>
-                      {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell>₹{user.totalInvested.toLocaleString()}</TableCell>
-                  <TableCell>{user.createdAt}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedUser(user)
-                          setFormData({
-                            name: user.name,
-                            email: user.email,
-                            phone: user.phone,
-                            status: user.status
-                          })
-                          setIsEditDialogOpen(true)
-                        }}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleToggleStatus(user.id)}
-                      >
-                        {user.status === "active" ? "Deactivate" : "Activate"}
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeleteUser(user.id)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {filteredUsers.map((user) => {
+                const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase()
+                return (
+                  <TableRow key={user.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback className="text-xs bg-gray-700 text-white">{initials}</AvatarFallback>
+                        </Avatar>
+                        <div className="font-medium">{user.name}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.phone}</TableCell>
+                    <TableCell>
+                      <span className={`px-3 py-1 rounded-md text-sm font-medium ${
+                        user.status === "active" 
+                          ? "text-green-700" 
+                          : "text-gray-600"
+                      }`}>
+                        {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                      </span>
+                    </TableCell>
+                    <TableCell>₹{user.totalInvested.toLocaleString()}</TableCell>
+                    <TableCell>{user.createdAt}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="cursor-pointer transition-colors duration-200"
+                          onClick={() => {
+                            setSelectedUser(user)
+                            setFormData({
+                              name: user.name,
+                              email: user.email,
+                              phone: user.phone,
+                              status: user.status
+                            })
+                            setIsEditDialogOpen(true)
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="cursor-pointer transition-colors duration-200"
+                          onClick={() => handleToggleStatus(user.id)}
+                        >
+                          {user.status === "active" ? "Deactivate" : "Activate"}
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="cursor-pointer transition-colors duration-200"
+                          onClick={() => handleDeleteUser(user.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </div>

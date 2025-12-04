@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Dialog,
   DialogContent,
@@ -346,11 +347,10 @@ export default function InvestmentsPage() {
           </div>
         </div>
 
-        <div className="border border-[rgb(233,233,235)] bg-white">
+        <div className="[&>div]:rounded-sm [&>div]:border">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>User</TableHead>
                 <TableHead>Plan</TableHead>
                 <TableHead>Principal</TableHead>
@@ -360,59 +360,70 @@ export default function InvestmentsPage() {
                 <TableHead>Start Date</TableHead>
                 <TableHead>Maturity Date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredInvestments.map((inv) => (
-                <TableRow key={inv.id}>
-                  <TableCell>{inv.id}</TableCell>
-                  <TableCell>{inv.userName}</TableCell>
-                  <TableCell>{inv.planName}</TableCell>
-                  <TableCell>₹{inv.principalAmount.toLocaleString()}</TableCell>
-                  <TableCell>{inv.interestRate}% ({inv.interestType})</TableCell>
-                  <TableCell>₹{inv.currentValue.toLocaleString()}</TableCell>
-                  <TableCell className="text-green-600">₹{inv.profit.toLocaleString()}</TableCell>
-                  <TableCell>{inv.startDate}</TableCell>
-                  <TableCell>{inv.maturityDate}</TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      inv.status === "active" ? "text-green-700" :
-                      inv.status === "matured" ? "text-blue-700" :
-                      "text-gray-600"
-                    }`}>
-                      {inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedInvestment(inv)
-                          setFormData({
-                            userId: inv.userId,
-                            planId: inv.planId,
-                            principalAmount: inv.principalAmount.toString(),
-                            startDate: inv.startDate
-                          })
-                          setIsEditDialogOpen(true)
-                        }}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeleteInvestment(inv.id)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {filteredInvestments.map((inv) => {
+                const initials = inv.userName.split(' ').map(n => n[0]).join('').toUpperCase()
+                return (
+                  <TableRow key={inv.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback className="text-xs bg-gray-700 text-white">{initials}</AvatarFallback>
+                        </Avatar>
+                        <div className="font-medium">{inv.userName}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{inv.planName}</TableCell>
+                    <TableCell>₹{inv.principalAmount.toLocaleString()}</TableCell>
+                    <TableCell>{inv.interestRate}% ({inv.interestType})</TableCell>
+                    <TableCell>₹{inv.currentValue.toLocaleString()}</TableCell>
+                    <TableCell className="text-green-600">₹{inv.profit.toLocaleString()}</TableCell>
+                    <TableCell>{inv.startDate}</TableCell>
+                    <TableCell>{inv.maturityDate}</TableCell>
+                    <TableCell>
+                      <span className={`px-3 py-1 rounded-md text-sm font-medium ${
+                        inv.status === "active" ? "text-green-700" :
+                        inv.status === "matured" ? "text-blue-700" :
+                        "text-gray-600"
+                      }`}>
+                        {inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="cursor-pointer transition-colors duration-200"
+                          onClick={() => {
+                            setSelectedInvestment(inv)
+                            setFormData({
+                              userId: inv.userId,
+                              planId: inv.planId,
+                              principalAmount: inv.principalAmount.toString(),
+                              startDate: inv.startDate
+                            })
+                            setIsEditDialogOpen(true)
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="cursor-pointer transition-colors duration-200"
+                          onClick={() => handleDeleteInvestment(inv.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </div>

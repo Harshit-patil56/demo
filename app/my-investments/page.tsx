@@ -183,10 +183,10 @@ export default function MyInvestmentsPage() {
       <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
 
-        <div className="border border-[rgb(233,233,235)] bg-white">
+        <div className="[&>div]:rounded-sm [&>div]:border">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>Plan</TableHead>
                 <TableHead>Principal</TableHead>
                 <TableHead>Interest Rate</TableHead>
