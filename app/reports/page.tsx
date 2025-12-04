@@ -101,7 +101,7 @@ export default function ReportsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">Reports</h1>
             <div className="flex-1 flex justify-center">
@@ -150,29 +150,32 @@ export default function ReportsPage() {
         </div>
       </nav>
 
-      <div className="p-2 md:p-4" style={{maxWidth: '1600px', margin: '0 auto'}}>
+      <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <Input
-              placeholder="Search reports..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
+        <div className="flex items-center gap-4 mb-6">
+          <Input
+            placeholder="Search reports..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-[350px]"
+          />
+          <div className="flex items-center gap-4 ml-auto">
+            <Select value={filterType} onValueChange={setFilterType}>
+              <SelectTrigger className="w-[200px] cursor-pointer transition-colors duration-200">
+                <SelectValue placeholder="Filter by type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="cursor-pointer">All Reports</SelectItem>
+                <SelectItem value="financial" className="cursor-pointer">Financial</SelectItem>
+                <SelectItem value="user" className="cursor-pointer">User</SelectItem>
+                <SelectItem value="investment" className="cursor-pointer">Investment</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button className="bg-black hover:bg-gray-800 text-white transition-colors duration-200 cursor-pointer">
+              Generate Report
+            </Button>
           </div>
-          <Select value={filterType} onValueChange={setFilterType}>
-            <SelectTrigger className="w-full sm:w-[200px]">
-              <SelectValue placeholder="Filter by type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Reports</SelectItem>
-              <SelectItem value="financial">Financial</SelectItem>
-              <SelectItem value="user">User</SelectItem>
-              <SelectItem value="investment">Investment</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         <div className="grid gap-4">
@@ -184,16 +187,16 @@ export default function ReportsPage() {
                   <p className="text-base text-gray-600">{report.description}</p>
                 </div>
                 <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                  report.type === "financial" ? "bg-blue-50 text-blue-700" :
-                  report.type === "user" ? "bg-purple-50 text-purple-700" :
-                  "bg-green-50 text-green-700"
+                  report.type === "financial" ? "text-blue-700" :
+                  report.type === "user" ? "text-purple-700" :
+                  "text-green-700"
                 }`}>
                   {report.type.charAt(0).toUpperCase() + report.type.slice(1)}
                 </span>
               </div>
               <div className="flex justify-between items-center mt-4">
                 <span className="text-base text-gray-500">{report.date}</span>
-                <Button size="sm">Download</Button>
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 cursor-pointer">Download</Button>
               </div>
             </div>
           ))}

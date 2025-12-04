@@ -78,6 +78,7 @@ export default function TransactionsPage() {
   const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false)
   const [filterType, setFilterType] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
+  const [searchQuery, setSearchQuery] = useState("")
 
   const [formData, setFormData] = useState({
     type: "deposit" as "deposit" | "withdrawal",
@@ -101,6 +102,9 @@ export default function TransactionsPage() {
   }
 
   const filteredTransactions = transactions.filter(transaction => {
+    const matchesSearch = transaction.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         transaction.amount.toString().includes(searchQuery)
+    if (!matchesSearch) return false
     if (filterType !== "all" && transaction.type !== filterType) return false
     if (filterStatus !== "all" && transaction.status !== filterStatus) return false
     return true
@@ -111,7 +115,7 @@ export default function TransactionsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">Transactions</h1>
             <div className="flex-1 flex justify-center">
@@ -145,90 +149,103 @@ export default function TransactionsPage() {
         </div>
       </nav>
 
-      <div className="p-2 md:p-4" style={{maxWidth: '1600px', margin: '0 auto'}}>
+      <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <Select value={filterType} onValueChange={setFilterType}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter by type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="deposit">Deposit</SelectItem>
-              <SelectItem value="withdrawal">Withdrawal</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-            </SelectContent>
-          </Select>
-          <Dialog open={isRequestDialogOpen} onOpenChange={setIsRequestDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>New Request</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>New Transaction Request</DialogTitle>
-                <DialogDescription>
-                  Submit a new deposit or withdrawal request
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="type">Type</Label>
-                  <Select
-                    value={formData.type}
-                    onValueChange={(value: "deposit" | "withdrawal") => 
-                      setFormData({...formData, type: value})
-                    }
+        <div className="flex items-center gap-4 mb-6">
+          <Input
+            placeholder="Search by ID or amount..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-[350px]"
+          />
+          <div className="flex items-center gap-4 ml-auto">
+            <Select value={filterType} onValueChange={setFilterType}>
+              <SelectTrigger className="w-[180px] cursor-pointer transition-colors duration-200">
+                <SelectValue placeholder="Filter by type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="cursor-pointer">All Types</SelectItem>
+                <SelectItem value="deposit" className="cursor-pointer">Deposit</SelectItem>
+                <SelectItem value="withdrawal" className="cursor-pointer">Withdrawal</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-[180px] cursor-pointer transition-colors duration-200">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="cursor-pointer">All Status</SelectItem>
+                <SelectItem value="pending" className="cursor-pointer">Pending</SelectItem>
+                <SelectItem value="approved" className="cursor-pointer">Approved</SelectItem>
+                <SelectItem value="rejected" className="cursor-pointer">Rejected</SelectItem>
+              </SelectContent>
+            </Select>
+            <Dialog open={isRequestDialogOpen} onOpenChange={setIsRequestDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-black hover:bg-gray-800 text-white transition-colors duration-200 cursor-pointer">New Request</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>New Transaction Request</DialogTitle>
+                  <DialogDescription>
+                    Submit a new deposit or withdrawal request
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="type">Type</Label>
+                    <Select
+                      value={formData.type}
+                      onValueChange={(value: "deposit" | "withdrawal") => 
+                        setFormData({...formData, type: value})
+                      }
+                    >
+                      <SelectTrigger className="cursor-pointer transition-colors duration-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="deposit" className="cursor-pointer">Deposit</SelectItem>
+                        <SelectItem value="withdrawal" className="cursor-pointer">Withdrawal</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="amount">Amount</Label>
+                    <Input
+                      id="amount"
+                      type="number"
+                      value={formData.amount}
+                      onChange={(e) => setFormData({...formData, amount: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="notes">Notes (Optional)</Label>
+                    <Textarea
+                      id="notes"
+                      value={formData.notes}
+                      onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button 
+                    onClick={handleSubmitRequest}
+                    className="bg-black hover:bg-gray-800 text-white transition-colors duration-200 cursor-pointer"
                   >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="deposit">Deposit</SelectItem>
-                      <SelectItem value="withdrawal">Withdrawal</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="amount">Amount</Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    value={formData.amount}
-                    onChange={(e) => setFormData({...formData, amount: e.target.value})}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="notes">Notes (Optional)</Label>
-                  <Textarea
-                    id="notes"
-                    value={formData.notes}
-                    onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleSubmitRequest}>Submit Request</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+                    Submit Request
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         {pendingCount > 0 && (
           <div className="mb-4">
-            <div className="px-4 py-2 bg-yellow-50 border border-yellow-200 rounded text-base">
-              <span className="font-medium">Pending Requests: </span>
-              <span className="font-semibold">{pendingCount}</span>
+            <div className="text-base">
+              <span className="font-medium text-gray-600">Pending Requests: </span>
+              <span className="font-semibold text-yellow-700">{pendingCount}</span>
             </div>
           </div>
         )}
@@ -251,7 +268,7 @@ export default function TransactionsPage() {
                   <TableCell>{txn.requestDate}</TableCell>
                   <TableCell>
                     <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      txn.type === "deposit" ? "bg-green-50 text-green-700" : "bg-orange-50 text-orange-700"
+                      txn.type === "deposit" ? "text-green-700" : "text-orange-700"
                     }`}>
                       {txn.type.charAt(0).toUpperCase() + txn.type.slice(1)}
                     </span>
@@ -261,9 +278,9 @@ export default function TransactionsPage() {
                   </TableCell>
                   <TableCell>
                     <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      txn.status === "approved" ? "bg-green-50 text-green-700" :
-                      txn.status === "pending" ? "bg-yellow-50 text-yellow-700" :
-                      "bg-red-50 text-red-700"
+                      txn.status === "approved" ? "text-green-700" :
+                      txn.status === "pending" ? "text-yellow-700" :
+                      "text-red-700"
                     }`}>
                       {txn.status.charAt(0).toUpperCase() + txn.status.slice(1)}
                     </span>

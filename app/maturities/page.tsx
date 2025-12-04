@@ -215,7 +215,7 @@ export default function MaturitiesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">Maturities</h1>
             <div className="flex-1 flex justify-center">
@@ -264,43 +264,41 @@ export default function MaturitiesPage() {
         </div>
       </nav>
 
-      <div className="p-2 md:p-4" style={{maxWidth: '1600px', margin: '0 auto'}}>
+      <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <Input
-              placeholder="Search by user or plan..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
-          </div>
+        <div className="flex items-center gap-4 mb-6">
+          <Input
+            placeholder="Search by user, plan, or ID..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-[350px]"
+          />
           <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-[180px] ml-auto cursor-pointer transition-colors duration-200">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="upcoming">Upcoming</SelectItem>
-              <SelectItem value="matured">Matured</SelectItem>
-              <SelectItem value="overdue">Overdue</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">All Status</SelectItem>
+              <SelectItem value="maturing-soon" className="cursor-pointer">Maturing Soon</SelectItem>
+              <SelectItem value="matured" className="cursor-pointer">Matured</SelectItem>
+              <SelectItem value="overdue" className="cursor-pointer">Overdue</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="mb-4 flex gap-4 text-base">
-          <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded">
-            <span className="font-medium">Upcoming: </span>
-            <span className="font-semibold">{upcomingCount}</span>
+          <div>
+            <span className="font-medium text-gray-600">Upcoming: </span>
+            <span className="font-semibold text-blue-600">{upcomingCount}</span>
           </div>
-          <div className="px-4 py-2 bg-green-50 border border-green-200 rounded">
-            <span className="font-medium">Matured: </span>
-            <span className="font-semibold">{maturedCount}</span>
+          <div>
+            <span className="font-medium text-gray-600">Matured: </span>
+            <span className="font-semibold text-green-600">{maturedCount}</span>
           </div>
-          <div className="px-4 py-2 bg-red-50 border border-red-200 rounded">
-            <span className="font-medium">Overdue: </span>
-            <span className="font-semibold">{overdueCount}</span>
+          <div>
+            <span className="font-medium text-gray-600">Overdue: </span>
+            <span className="font-semibold text-red-600">{overdueCount}</span>
           </div>
         </div>
 
@@ -333,9 +331,9 @@ export default function MaturitiesPage() {
                   </TableCell>
                   <TableCell>
                     <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      inv.status === "maturing-soon" ? "bg-blue-50 text-blue-700" :
-                      inv.status === "matured" ? "bg-green-50 text-green-700" :
-                      "bg-red-50 text-red-700"
+                      inv.status === "maturing-soon" ? "text-blue-700" :
+                      inv.status === "matured" ? "text-green-700" :
+                      "text-red-700"
                     }`}>
                       {getStatusText(inv.status)}
                     </span>

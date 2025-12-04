@@ -165,7 +165,7 @@ export default function UserDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">Dashboard</h1>
             <div className="flex-1 flex justify-center">

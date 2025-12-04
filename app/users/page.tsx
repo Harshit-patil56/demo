@@ -139,14 +139,14 @@ export default function UsersPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">Users</h1>
             <div className="flex-1 flex justify-center">
               <NavigationMenu className="max-w-full">
                 <NavigationMenuList>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/dashboard" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
+                    <NavigationMenuLink href="/dashboard" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
                       Dashboard
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -156,27 +156,27 @@ export default function UsersPage() {
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/plans" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
+                    <NavigationMenuLink href="/plans" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
                       Plans
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/investments" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
+                    <NavigationMenuLink href="/investments" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
                       Investments
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/requests" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
+                    <NavigationMenuLink href="/requests" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
                       Requests
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/maturities" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
+                    <NavigationMenuLink href="/maturities" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
                       Maturities
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/reports" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors text-lg">
+                    <NavigationMenuLink href="/reports" className="px-4 py-2 relative text-[rgb(124,126,140)] hover:text-gray-900 transition-colors duration-200 text-lg">
                       Reports
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -188,31 +188,30 @@ export default function UsersPage() {
         </div>
       </nav>
 
-      <div className="p-2 md:p-4" style={{maxWidth: '1600px', margin: '0 auto'}}>
+      <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <Input
-              placeholder="Search by name, email, or phone..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
-          </div>
+        <div className="flex items-center gap-4 mb-6">
+          <Input
+            placeholder="Search by name, email, or phone..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-[350px]"
+          />
+          <div className="flex gap-4 ml-auto">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-[180px] cursor-pointer transition-colors duration-200">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Inactive</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">All Status</SelectItem>
+              <SelectItem value="active" className="cursor-pointer">Active</SelectItem>
+              <SelectItem value="inactive" className="cursor-pointer">Inactive</SelectItem>
             </SelectContent>
           </Select>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button>Add User</Button>
+              <Button className="bg-black hover:bg-gray-800 text-white transition-colors duration-200 cursor-pointer">Add User</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -270,6 +269,7 @@ export default function UsersPage() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
         <div className="border border-[rgb(233,233,235)] bg-white">
@@ -294,8 +294,8 @@ export default function UsersPage() {
                   <TableCell>
                     <span className={`px-3 py-1 rounded-md text-sm font-medium ${
                       user.status === "active" 
-                        ? "bg-green-50 text-green-700" 
-                        : "bg-gray-100 text-gray-600"
+                        ? "text-green-700" 
+                        : "text-gray-600"
                     }`}>
                       {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                     </span>

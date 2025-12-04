@@ -108,7 +108,7 @@ export default function RequestsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">Requests</h1>
             <div className="flex-1 flex justify-center">
@@ -157,45 +157,48 @@ export default function RequestsPage() {
         </div>
       </nav>
 
-      <div className="p-2 md:p-4" style={{maxWidth: '1600px', margin: '0 auto'}}>
+      <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <Input
-              placeholder="Search by user, plan, or request ID..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
+        <div className="flex items-center gap-4 mb-6">
+          <Input
+            placeholder="Search by user, plan, or request ID..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-[350px]"
+          />
+          <div className="flex items-center gap-4 ml-auto">
+            <Select value={filterType} onValueChange={setFilterType}>
+              <SelectTrigger className="w-[180px] cursor-pointer transition-colors duration-200">
+                <SelectValue placeholder="All Types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="cursor-pointer">All Types</SelectItem>
+                <SelectItem value="withdrawal" className="cursor-pointer">Withdrawal</SelectItem>
+                <SelectItem value="investment" className="cursor-pointer">Investment</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-[180px] cursor-pointer transition-colors duration-200">
+                <SelectValue placeholder="All Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="cursor-pointer">All Status</SelectItem>
+                <SelectItem value="pending" className="cursor-pointer">Pending</SelectItem>
+                <SelectItem value="approved" className="cursor-pointer">Approved</SelectItem>
+                <SelectItem value="rejected" className="cursor-pointer">Rejected</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button className="bg-black hover:bg-gray-800 text-white transition-colors duration-200 cursor-pointer">
+              New Request
+            </Button>
           </div>
-          <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={filterType} onValueChange={setFilterType}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter by type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="withdrawal">Withdrawal</SelectItem>
-              <SelectItem value="investment">Investment</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         <div className="mb-4 flex gap-4 text-base">
-          <div className="px-4 py-2 bg-yellow-50 border border-yellow-200 rounded">
-            <span className="font-medium">Pending: </span>
-            <span className="font-semibold">{pendingCount}</span>
+          <div>
+            <span className="font-medium text-gray-600">Pending: </span>
+            <span className="font-semibold text-yellow-700">{pendingCount}</span>
           </div>
         </div>
 
@@ -218,16 +221,16 @@ export default function RequestsPage() {
                   <TableCell>{req.id}</TableCell>
                   <TableCell>{req.userName}</TableCell>
                   <TableCell>
-                    <span className="px-3 py-1 rounded-md text-sm font-medium bg-blue-50 text-blue-700">
+                    <span className="px-3 py-1 rounded-md text-sm font-medium text-purple-700">
                       {req.type.charAt(0).toUpperCase() + req.type.slice(1)}
                     </span>
                   </TableCell>
                   <TableCell>₹{req.amount.toLocaleString()}</TableCell>
                   <TableCell>
                     <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      req.status === "pending" ? "bg-yellow-50 text-yellow-700" :
-                      req.status === "approved" ? "bg-green-50 text-green-700" :
-                      "bg-red-50 text-red-700"
+                      req.status === "pending" ? "text-yellow-700" :
+                      req.status === "approved" ? "text-green-700" :
+                      "text-red-700"
                     }`}>
                       {req.status.charAt(0).toUpperCase() + req.status.slice(1)}
                     </span>

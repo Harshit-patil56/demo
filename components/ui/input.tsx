@@ -1,4 +1,5 @@
 import React from "react"
+import { cn } from "@/lib/utils"
 
 export function Input({ 
   id, 
@@ -9,6 +10,7 @@ export function Input({
   disabled,
   readOnly,
   step,
+  className,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
@@ -21,8 +23,11 @@ export function Input({
       disabled={disabled}
       readOnly={readOnly}
       step={step}
+      className={cn(
+        "h-9 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed",
+        className
+      )}
       {...props}
-      className="h-9 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
     />
   )
 }

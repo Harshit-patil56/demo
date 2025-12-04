@@ -166,7 +166,7 @@ export default function PlansPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">Plans</h1>
             <div className="flex-1 flex justify-center">
@@ -215,8 +215,129 @@ export default function PlansPage() {
         </div>
       </nav>
 
-      <div className="p-2 md:p-4" style={{maxWidth: '1600px', margin: '0 auto'}}>
+      <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
+
+        <div className="flex justify-end mb-6">
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-black hover:bg-gray-800 text-white transition-colors duration-200 cursor-pointer">
+                Create New Plan
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Create New Plan</DialogTitle>
+                <DialogDescription>
+                  Add a new investment plan with interest rates and duration
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="name">Plan Name</Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="status">Status</Label>
+                    <Select
+                      value={formData.status}
+                      onValueChange={(value: "active" | "inactive") => 
+                        setFormData({...formData, status: value})
+                      }
+                    >
+                      <SelectTrigger className="cursor-pointer transition-colors duration-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active" className="cursor-pointer">Active</SelectItem>
+                        <SelectItem value="inactive" className="cursor-pointer">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="interestRate">Interest Rate (%)</Label>
+                    <Input
+                      id="interestRate"
+                      type="number"
+                      step="0.1"
+                      value={formData.interestRate}
+                      onChange={(e) => setFormData({...formData, interestRate: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="interestType">Interest Type</Label>
+                    <Select
+                      value={formData.interestType}
+                      onValueChange={(value: "simple" | "compound") => 
+                        setFormData({...formData, interestType: value})
+                      }
+                    >
+                      <SelectTrigger className="cursor-pointer transition-colors duration-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="simple" className="cursor-pointer">Simple</SelectItem>
+                        <SelectItem value="compound" className="cursor-pointer">Compound</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="duration">Duration (months)</Label>
+                  <Input
+                    id="duration"
+                    type="number"
+                    value={formData.duration}
+                    onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="minAmount">Min Amount (₹)</Label>
+                    <Input
+                      id="minAmount"
+                      type="number"
+                      value={formData.minAmount}
+                      onChange={(e) => setFormData({...formData, minAmount: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="maxAmount">Max Amount (₹)</Label>
+                    <Input
+                      id="maxAmount"
+                      type="number"
+                      value={formData.maxAmount}
+                      onChange={(e) => setFormData({...formData, maxAmount: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button 
+                  onClick={handleAddPlan}
+                  className="bg-black hover:bg-gray-800 text-white transition-colors duration-200 cursor-pointer"
+                >
+                  Create Plan
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => (

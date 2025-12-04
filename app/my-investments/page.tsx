@@ -146,7 +146,7 @@ export default function MyInvestmentsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 z-50 w-full p-4 bg-white border-b border-[rgb(233,233,235)]">
-        <div style={{maxWidth: '1600px', margin: '0 auto'}}>
+        <div style={{maxWidth: '1400px', margin: '0 auto'}}>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold text-gray-900">My Investments</h1>
             <div className="flex-1 flex justify-center">
@@ -180,7 +180,7 @@ export default function MyInvestmentsPage() {
         </div>
       </nav>
 
-      <div className="p-2 md:p-4" style={{maxWidth: '1600px', margin: '0 auto'}}>
+      <div className="p-2 md:p-4" style={{maxWidth: '1400px', margin: '0 auto'}}>
         <div className="mb-6" style={{height: '40px'}}></div>
 
         <div className="border border-[rgb(233,233,235)] bg-white">
@@ -209,7 +209,7 @@ export default function MyInvestmentsPage() {
                   <TableCell>{inv.maturityDate}</TableCell>
                   <TableCell>
                     <span className={`px-3 py-1 rounded-md text-sm font-medium ${
-                      inv.status === "active" ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-600"
+                      inv.status === "active" ? "text-green-700" : "text-gray-600"
                     }`}>
                       {inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}
                     </span>
